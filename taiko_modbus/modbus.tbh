@@ -1,0 +1,20 @@
+declare function tcp_to_rtu(mb_str as string) as string
+declare function tcp_to_ascii(mb_str as string) as string
+declare function rtu_to_tcp(mb_str as string) as string
+declare function rtu_to_ascii(mb_str as string) as string
+declare function ascii_to_tcp(mb_str as string) as string
+declare function ascii_to_rtu(mb_str as string) as string
+
+declare function get_lrc(input_str as string) as string(2)
+declare function get_crc(input_str as string) as string(2)
+
+declare function hex_to_str(mb_str as string) as string
+
+declare tcp_header as string(4)
+
+const CRC_INI=&hFFFF
+const POLY=&HA001
+
+
+#define modbus_serial_mode 0	'0 = ASCII / 1 = RTU
+

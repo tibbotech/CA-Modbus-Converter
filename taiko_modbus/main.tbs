@@ -1,0 +1,94 @@
+'======================================== simple ModBUS conversion demo =======================================
+'
+'This project allows conversion between ModBUS TCP <> ModBUS RTU and ModBUS TCP <> ModBUS ASCII
+'
+'The conversion functions can be easily incoporated into your own project by copying the modbus.tbs and modbus.tbh
+'files into your own project and in the global.tbh you should add this line: 
+'
+'	include "modbus.tbh"
+'
+'To select between which serial ModBUS mode to use, adjust the preprocessor "tcp_header" in the modbus.tbh accordingly.
+'
+'
+'Public (user) functions from modbus.tbs:
+'
+'	ascii_to_rtu	*not used in this demo
+'	ascii_to_tcp	
+'	rtu_to_ascii	*not used in this demo
+'	rtu_to_tcp		
+'	tcp_to_ascii
+'	tcp_to_rtu
+'	
+'You could ignore the internal functions as you should not have the need to call them by yourself.
+'
+'
+'===============================================================================================================
+
+include "global.tbh"
+
+'====================================================================
+sub on_sys_init()
+
+	net.ip = "192.168.1.222"		'change as necessary
+	net.netmask = "255.255.255.0"	'change as necessary
+	net.gatewayip = "192.168.1.1"	'change as necessary
+	
+	'setup the Ethernet socket
+	sock.num = 0
+	sock.protocol = PL_SOCK_PROTOCOL_TCP
+	sock.inconmode = PL_SOCK_INCONMODE_ANY_IP_ANY_PORT
+	sock.reconmode = PL_SOCK_RECONMODE_1
+	sock.localportlist = "502"
+	sock.connectiontout=50
+	sock.rxbuffrq(2)
+	sock.txbuffrq(2)
+	
+	'setup the serial port
+	ser.num = 0
+	ser.parity = PL_SER_PR_NONE
+	ser.bits = PL_SER_BB_8
+	ser.flowcontrol = DISABLED
+	ser.baudrate = ser.div9600
+	ser.interface = PL_SER_SI_FULLDUPLEX
+	ser.interchardelay = 5
+	ser.rxbuffrq(3)
+	ser.txbuffrq(2)
+	
+	sys.buffalloc
+	ser.enabled = YES		
+	
+end sub
+
+'--------------------------------------------------------------------
+sub on_ser_data_arrival()
+
+	dim x as string
+	
+	#if modbus_serial_mode = 0	'ASCII mode	
+		x = ascii_to_tcp(ser.getdata(255))
+	#else
+		x = rtu_to_tcp(ser.getdata(255))
+	#endif
+
+	sock.num = 0
+	sock.setdata(x)
+	sock.send
+	
+end sub
+
+'--------------------------------------------------------------------
+sub on_sock_data_arrival()
+		
+	dim x as string
+	
+	#if modbus_serial_mode = 0	'ASCII mode	
+		x = tcp_to_ascii(sock.getdata(255))
+	#else
+		x = tcp_to_rtu(sock.getdata(255))
+	#endif
+
+	ser.num = 0
+	ser.setdata(x)
+	ser.send
+end sub
+

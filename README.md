@@ -1,5 +1,3 @@
-# CA-Modbus-Converter
+# Modbus Converter Library
 
-To download the most recent project without installing GIT, please press the green "Clone or Download" button and select "Download ZIP".
-
-For more detail about this project, please visit <a href="http://tibbo.com/programmable/applications/network/modbus.html" target="_blank">Project Description Page</a>
+This is a bridge demo between Modbus/ASCII/RTU and MODBUS/TCPIP. The serial port is connected to a Modbus/ASCII or MODBUS/RTU device, while the Ethernet port is connected to the server. Commands are sent from the server via Ethernet, and the slave device gets these after they've been converted.

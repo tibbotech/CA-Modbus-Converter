@@ -1,16 +1,24 @@
 [project]
 version=1
-platform=EM1206
-src_lib_ver=1_00
+platform=EM500W
+src_lib_ver=2_01_03
 name=modbus_conversion
 output=modbus_conversion.tpc
-debug=off
-defines=/dLCD_TYPE=SAMSUNG_S6B0108 /dOBJECT_LCD=LCD_ENABLED /dOBJECT_FD=FD_ENABLED /dOBJECT_KP=KP_ENABLED 
+debug=on
+defines=/dOBJECT_FD=FD_ENABLED /dLCD_TYPE=SAMSUNG_S6B0108 /dOBJECT_LCD=LCD_ENABLED /dOBJECT_KP=KP_ENABLED /dOBJECT_WLN=WLN_ENABLED
 transport=udp_winpcap
 [address1]
 platform=EM1206
 transport=udp_winpcap
 address=0.36.119.80.157.190
+[address2]
+platform=EM510W
+transport=udp_winpcap
+address=0.123.234.34.45.225
+[address3]
+platform=EM500W
+transport=udp_winpcap
+address=0.36.119.82.56.9
 [file1]
 path=main.tbs
 type=basic
